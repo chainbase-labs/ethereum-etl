@@ -46,7 +46,7 @@ class EthTransactionMapper(object):
 
         transaction.max_fee_per_blob_gas = hex_to_dec(json_dict.get('maxFeePerBlobGas'))
         transaction.blob_versioned_hashes = json_dict.get('blobVersionedHashes')
-        transaction.access_list = json_dict.get('accessList')
+        transaction.access_list = self.parse_access_list(json_dict.get('accessList'))
         transaction.y_parity = hex_to_dec(json_dict.get('yParity'))
 
         transaction.r = json_dict.get('r')
@@ -60,6 +60,18 @@ class EthTransactionMapper(object):
         transaction.mint = json_dict.get('mint')
 
         return transaction
+
+    def parse_access_list(self, access_list):
+        if access_list is None:
+            return None
+
+        return [
+            {
+                'address': to_normalized_address(access['address']),
+                'storage_keys': access['storageKeys']
+            }
+            for access in access_list
+        ]
 
     def transaction_to_dict(self, transaction):
         return {

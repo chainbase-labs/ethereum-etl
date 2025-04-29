@@ -55,6 +55,8 @@ class EthTransactionMapper(object):
         transaction.chain_id = hex_to_dec(json_dict.get('chainId'))
         transaction.method_id = json_dict.get('input')[0:10]
 
+        transaction.authorization_list = self.parse_authorization_list(json_dict.get("authorizationList"))
+
         # OP Stack
         transaction.source_hash = json_dict.get('sourceHash')
         transaction.mint = json_dict.get('mint')
@@ -71,6 +73,22 @@ class EthTransactionMapper(object):
                 'storage_keys': access['storageKeys']
             }
             for access in access_list
+        ]
+
+    def parse_authorization_list(self, authorization_list):
+        if authorization_list is None:
+            return None
+
+        return [
+            {
+                "chain_id": hex_to_dec(authorization.get('chainId')),
+                "address": to_normalized_address(authorization.get('address')),
+                "nonce": hex_to_dec(authorization.get('nonce')),
+                "y_parity": authorization.get('yParity'),
+                "r": authorization.get('r'),
+                "s": authorization.get('s'),
+            }
+            for authorization in authorization_list
         ]
 
     def transaction_to_dict(self, transaction):
@@ -96,6 +114,8 @@ class EthTransactionMapper(object):
             'blob_versioned_hashes': transaction.blob_versioned_hashes,
             'access_list': transaction.access_list,
             'y_parity': transaction.y_parity,
+
+            'authorization_list': transaction.authorization_list,
 
             'r': transaction.r,
             's': transaction.s,

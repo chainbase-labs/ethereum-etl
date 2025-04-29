@@ -48,6 +48,8 @@ class EthTransaction(object):
         self.v = None
         self.chain_id = None
 
+        self.authorization_list = None
+
         self.block_timestamp = None
         self.base_fee_per_gas = None
         self.log_count = None

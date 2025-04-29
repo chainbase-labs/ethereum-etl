@@ -66,7 +66,8 @@ TRANSACTION_FIELDS_TO_EXPORT = [
     'max_fee_per_blob_gas',
     'blob_versioned_hashes',
     'access_list',
-    'y_parity'
+    'y_parity',
+    'authorization_list',
 ]
 
 

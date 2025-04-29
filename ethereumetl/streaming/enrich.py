@@ -101,6 +101,7 @@ def enrich_transactions(blocks, transactions, receipts):
             's',
             'v',
             'chain_id',
+            'authorization_list',
             'base_fee_per_gas',
             'method_id',
             'source_hash',
